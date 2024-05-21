@@ -1,0 +1,110 @@
+import random
+import discord     
+from discord.ext import commands        #calling commands
+from discord.utils import get
+from discord.ext.commands import Context
+import requests, string
+
+
+
+client = commands.Bot(command_prefix = "!", intents = discord.Intents.all(), help_command=None)
+client.intents.members = True
+
+@client.event
+async def on_ready():
+    game = discord.Game(name="Your Mother")                             #define the activity
+    stream = discord.Streaming(name="Hot Tub Bath", platform="YouTube", url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    watch = discord.Activity(name="Breaking Bad", type=discord.ActivityType.watching)
+    listen = discord.Activity(name="At A Medium Pace - Adam Sandler", type=discord.ActivityType.listening)
+    ranstatus = [game, stream, watch, listen]
+    ranactivity = random.choice(ranstatus)                #chooses activity randomly
+    await client.change_presence(status=discord.Status.idle, activity = ranactivity)             #shows the status and activity
+    print(f"Logged in as {client.user}")
+
+
+@client.event
+async def on_command_error(context:Context, error):
+    if isinstance(error, commands.CommandNotFound):
+        embed = discord.Embed(
+        title='Error',
+        description='This is not a command! Type "!allcommands"',
+        color=0xFF0000)
+        await context.send(embed=embed)
+
+
+@client.event
+async def on_member_join(member):
+    server = client.get_guild(745638314622845049)      #defining the server id
+    role = get(server.roles, name="YOUR HEISENBURG")     #defining the server role
+    channel = client.get_channel(745641072683909261)    #defining the channel id 
+    await member.add_roles(role)        #giving the member the role
+    await channel.send(f"My name is {member.mention}, YO!")     #send the message to the channel to mention the member
+
+@client.command()
+async def allcommands(ctx):
+    embed = discord.Embed(
+    title="All the Commands",
+    color=0xFF0000,
+    description=
+"""!help (Don't ask for help please)
+
+!randomnumber <number> <number> (chooses at random between those 2 numbers)
+
+!flipacoin
+
+!accountstatus 1 (see when you created your account)
+
+!accountstatus 2 (see when you made the mistake of joining the server)
+
+!calculate <number> <sum> <number> 
+""")
+    
+    await ctx.send(embed=embed)
+
+@client.command()
+async def randomnumber(ctx, number1: int, number2: int):
+    await ctx.send (f"""
+Your random number is {random.randint(number1, number2)}""")    # a random number is called between the 2 numbers the member calls
+    
+@client.command()
+async def flipacoin(ctx):
+    coin = ["heads", "tales"]
+    await ctx.send(f"You landed on {random.choice(coin)}")
+
+@client.command()
+async def help(ctx):
+    embed=discord.Embed(
+        title="Click For Help",
+        type="video",
+        url="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        color=0xFF0000)
+    await ctx.send(embed=embed)
+
+
+@client.command()
+async def accountstatus(ctx, status: int):
+    match status:
+        case 1:                #using cases instead of if statements
+            await ctx.send (f"""
+User created their account on {ctx.author.created_at.day}/{ctx.author.created_at.month}/{ctx.author.created_at.year}""")
+        case 2:
+            await ctx.send(f"""
+User made the wise decision to join this server on {ctx.author.joined_at.day}/{ctx.author.joined_at.month}/{ctx.author.joined_at.year}""")
+
+@client.command()
+async def calculate(ctx, number1:int, sum:str, number2:int):        #simple calculator
+    if number1 == 0 and number2 == 0 and sum == "%":
+        await ctx.send("This is not a number (NaN)")
+    match sum:
+        case "+":
+            await ctx.send(f"""The answer is {number1 + number2}""")
+        case "-":
+            await ctx.send(f"""The answer is {number1 - number2}""")
+        case "x":
+            await ctx.send(f"""The answer is {number1 * number2}""")
+        case "%":
+            await ctx.send(f"""The answer is {number1 / number2}""")
+
+
+#running the program
+client.run("MTE0NDIzOTY1MDM3MDc0ODQ2OA.G1a_fq.f0YjQWE7q9qZdwaubzBijb3FrG54t0Ymu_7PsE")
