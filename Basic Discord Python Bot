@@ -107,4 +107,4 @@ async def calculate(ctx, number1:int, sum:str, number2:int):        #simple calc
 
 
 #running the program
-client.run("MTE0NDIzOTY1MDM3MDc0ODQ2OA.G1a_fq.f0YjQWE7q9qZdwaubzBijb3FrG54t0Ymu_7PsE")
+client.run("   ") #bottoken
