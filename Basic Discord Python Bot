@@ -12,10 +12,10 @@ client.intents.members = True
 
 @client.event
 async def on_ready():
-    game = discord.Game(name="Your Mother")                             #define the activity
-    stream = discord.Streaming(name="Hot Tub Bath", platform="YouTube", url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    game = discord.Game(name="Fortnite")                             #define the activity
+    stream = discord.Streaming(name="Fortnite today - come watch me beat my kill record in solo squads", platform="YouTube", url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     watch = discord.Activity(name="Breaking Bad", type=discord.ActivityType.watching)
-    listen = discord.Activity(name="At A Medium Pace - Adam Sandler", type=discord.ActivityType.listening)
+    listen = discord.Activity(name="Paradise - Coldplay", type=discord.ActivityType.listening)
     ranstatus = [game, stream, watch, listen]
     ranactivity = random.choice(ranstatus)                #chooses activity randomly
     await client.change_presence(status=discord.Status.idle, activity = ranactivity)             #shows the status and activity
